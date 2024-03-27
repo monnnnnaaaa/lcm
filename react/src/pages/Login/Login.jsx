@@ -1,13 +1,14 @@
 import { useState } from "react";
 
+import Logo from "../../images/logo.png"
 import "./Login.css";
 
 const LoginPage = () => {
-    const [error, setError] = useState("Test");
+    const [error, setError] = useState("");
 
     return (
         <div className="login-container">
-            <img src="img/logo.png" alt="Logo" className="logo" />
+            <img src={Logo} alt="Logo" className="logo" />
             <h2>QUOTATION SYSTEM</h2>
             {error && <p className="error">{error}</p>}
             <form onSubmit={(e) => e.preventDefault()}>
