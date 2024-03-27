@@ -4,7 +4,7 @@ $sname= "localhost";
 $unmae= "root";
 $password = "";
 
-$db_name = "quotation-db";
+$db_name = "quotation_db";
 
 $conn = mysqli_connect($sname, $unmae, $password, $db_name);
 
