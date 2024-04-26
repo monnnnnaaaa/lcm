@@ -11,29 +11,59 @@
             <span>Dashboard</span></a>
     </li>
 
-    <li class="nav-item">
-        <a class="nav-link" href="quotation.php">
-            <i class="fas fa-fw fa-quote-left"></i>
-            <span>Quotation</span></a>
+
+    <li class="nav-item dropdown">
+        <a class="nav-link" href="" id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-fw fa-bars"></i>
+            <span>Quotation</span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown" >
+            <a class="dropdown-item" href="./manage.php">Manage Quatation</a>
+            <a class="dropdown-item" href="./create.php">Create Quatation </a>
+        </div>
     </li>
 
-    <li class="nav-item ">
-        <a class="nav-link" href="products.php">
-            <i class="fas fa-fw fa-toolbox"></i>
-            <span>Product</span></a>
-    </li>
+    <li class="nav-item dropdown">
+    <a class="nav-link" href="#" id="productDropdown" role="button" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-fw fa-toolbox"></i>
+        <span>Product</span>
+    </a>
+    <div class="dropdown-menu" aria-labelledby="productDropdown">
+        <a class="dropdown-item" href="./all-product.php">All Products</a>
+        <a class="dropdown-item" href="./add-product.php">Add Products</a>
+        <a class="dropdown-item" href="./manage-product.php">Manage Products</a>
+    </div>
+</li>
 
-    <li class="nav-item">
-        <a class="nav-link" href="customer.php">
+<!-- <li class="nav-item">
+        <a class="nav-link" href="./customer.php">
             <i class="fas fa-fw fa-users"></i>
             <span>Customer</span></a>
     </li>
+</li> -->
 
-    <li class="nav-item">
-        <a class="nav-link" href="user.php">
-            <i class="fas fa-fw fa-user"></i>
-            <span>User</span></a>
-    </li>
+<li class="nav-item dropdown">
+    <a class="nav-link" href="#" id="userDropdown" role="button" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-fw fa-user"></i>
+        <span>Customer</span>
+    </a>
+    <div class="dropdown-menu" aria-labelledby="userDropdown">
+        <a class="dropdown-item" href="./customer.php">All Customer</a>
+        <a class="dropdown-item" href="./add-customer.php">Add Customer</a>
+    </div>
+</li>
+
+<li class="nav-item dropdown">
+    <a class="nav-link" href="#" id="userDropdown" role="button" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-fw fa-user"></i>
+        <span>User</span>
+    </a>
+    <div class="dropdown-menu" aria-labelledby="userDropdown">
+        <a class="dropdown-item" href="./all-user.php">All Users</a>
+        <a class="dropdown-item" href="./add-user.php">Add Users</a>
+    </div>
+</li>
+
 
     <a href="logout.php" class="logout-btn ml-3">Logout</a>
 </ul>

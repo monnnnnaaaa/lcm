@@ -1,13 +1,10 @@
 <?php
 
-$sname= "localhost";
-$unmae= "root";
-$password = "";
+$conn = mysqli_connect('localhost', 'root', '', 'quotation-db');
+// $conn = mysqli_connect($sname, $unmae, $password, $db_name);
 
-$db_name = "quotation_db";
+// if (!$conn) {
+// 	echo "Connection failed!";
+// }
 
-$conn = mysqli_connect($sname, $unmae, $password, $db_name);
-
-if (!$conn) {
-	echo "Connection failed!";
-}
+?>

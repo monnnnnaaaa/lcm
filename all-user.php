@@ -1,11 +1,10 @@
 <?php
 require 'db_conn.php';
 
-$select = mysqli_query($conn, "SELECT * FROM customer");
+$select = mysqli_query($conn, "SELECT * FROM users");
 
 
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -17,8 +16,7 @@ $select = mysqli_query($conn, "SELECT * FROM customer");
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Customer Page</title>
-
+    <title>System User</title>
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
@@ -31,18 +29,16 @@ $select = mysqli_query($conn, "SELECT * FROM customer");
     <?php
     require 'sidebar.php';
     ?>
-    
-    <div class="container-product bg-white" id="productContainer">
+
+    <div class="container-product-manage bg-white" id="productContainerManage">
         <div class="card shadow mb-4">
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                <h6 class="m-0 font-weight-bold text-white">Customer List</h6>
+                <h6 class="m-0 font-weight-bold text-white">User Information</h6>
                 <div class="search-box-customer d-flex align-items-center ">
-                    <input type="text" class="mr-2" id="searchInputLeft" placeholder="Search customer..." onkeyup="searchCustomer()">
+                    <input type="text" class="mr-2" id="searchInputUser" placeholder="Search user..." onkeyup="searchUser()">
                 </div>
-            </div>
-        </div>    
-
-        <div class="card-body">
+            </div>      
+            <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-bordered" id="userTable" width="100%" cellspacing="0">
                     <form method="POST" action="add.php"> 
@@ -50,29 +46,26 @@ $select = mysqli_query($conn, "SELECT * FROM customer");
                                 <tr>
                                     <th>ID</th>
                                     <th>Name</th>
-                                    <th>Phone Number</th>
-                                    <th>Address</th>                                
+                                    <th>Username</th>                                
                                 </tr>
                             </thead>
                             <tfoot>
                                 <tr>
                                     <th>ID</th>
                                     <th>Name</th>
-                                    <th>Phone Number</th>
-                                    <th>Address</th>    
+                                    <th>Username</th>    
                                 </tr>
                             </tfoot>
                             <?php
-                            $result = mysqli_query($conn, "SELECT * FROM customer");
+                            $result = mysqli_query($conn, "SELECT * FROM users");
 
                             while ($row = mysqli_fetch_assoc($result)) {
                         ?>
-                            <tr id="customerRow">  
+                            <tr>  
                                 
                                 <th><?php echo $row['id']; ?></th>
-                                <th><?php echo $row['customer_name']; ?></th>
-                                <th><?php echo $row['customer_num']; ?></th>
-                                <th><?php echo $row['address']; ?></th>
+                                <th><?php echo $row['name']; ?></th>
+                                <th><?php echo $row['user_name']; ?></th>
                                 
                                 <!-- <th>
                                     <a href="admin-update.php?edit=<?php echo $row['id']; ?>" class="btn btn-success btn-block mb-1"> <i class="fas fa-edit"></i> EDIT </a>
@@ -88,9 +81,8 @@ $select = mysqli_query($conn, "SELECT * FROM customer");
                     
                 </div>
             </div>
-            
-    </div>
-    
-    <script src="js/customer.js"></script>
+        </div>  
+    </div>    
+<script src="js/user.js"></script>      
 </body>
 </html>
