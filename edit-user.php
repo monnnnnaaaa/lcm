@@ -1,26 +1,51 @@
 <?php
+
 require 'db_conn.php';
 
-if(isset($_POST['submit'])){
-    $name = $_POST['name'];
+session_start();
+
+if (!isset($_GET['edit'])) {
+    echo "User ID is not provided.";
+    exit;
+}
+
+$id = $_GET['edit'];
+
+if(isset($_GET['edit'])){
+    $id = $_GET['edit'];
+    $select_user = mysqli_query($conn, "SELECT * FROM users WHERE id = $id");
+    $user = mysqli_fetch_assoc($select_user);
+    $_SESSION['edit_user'] = $user;
+
+    var_dump($_SESSION['edit_user']);
+}
+
+
+if (isset($_POST['update_user'])) {
+
     $user_name = $_POST['user_name'];
     $password = $_POST['password'];
-    
-    if(empty($name) || empty($user_name) || empty($password)){
-        echo '<script>alert("Please fill out all fields");</script>';
-    }else{
-        $insert = "INSERT INTO users (name, user_name, password) 
-        VALUES ('$name', '$user_name', '$password')";
-        $upload = mysqli_query($conn, $insert);
+    $name = $_POST['name'];
 
-        if($upload){
-            echo '<script>alert("New user added successfully!!");</script>';
-        }else{
-            echo '<script>alert("Could not add the user");</script>';  
+    if (empty($user_name) || empty($password) || empty($name)) {
+        echo '<script>alert("Please fill out all fields");</script>';
+    } else {
+
+        $update = "UPDATE users SET user_name='$user_name', password='$password', name='$name' WHERE id = $id";
+
+        $upload = mysqli_query($conn, $update);
+
+        if ($upload) {
+            header('location: all-user.php');
+            exit;
+        } else {
+            echo '<script>alert("Could not update the user");</script>';
         }
     }
 }
 ?>
+
+ 
  
 <!DOCTYPE html>
 <html lang="en">
@@ -54,29 +79,30 @@ if(isset($_POST['submit'])){
                     <h3 class="panel-h3">User Information</h3>
                 </div>
                 <div class="panel-body form-group form-group-sm">
-                    <form method="post" id="add_product">
+                    <form action="<?php echo $_SERVER['PHP_SELF'] . '?edit=' . $id; ?>" method="post" id="add_product">
                         <input type="hidden" name="action" value="add_product">
 
                         <div class="row">
                             <div class="col-xs-4 ml-5">
-                                <input type="text" class="form-control required"  name="name"
+                                <h6>Enter Name</h6>
+                                <input type="text" class="form-control required"  name="name" value="<?php echo $user['name']; ?>"
                                     placeholder="Enter Name" >
                             </div>
                             <div class="col-xs-4">
-                                <input type="text" class="form-control required" name="user_name"
+                                <h6>Enter Username</h6>
+                                <input type="text" class="form-control required" name="user_name" value="<?php echo $user['user_name']; ?>"
                                     placeholder="Enter Username">
                             </div>
                             <div class="col-xs-4 ml-1">
-                                <input type="password" class="form-control required" name="password"
+                                <h6>Enter Password</h6>
+                                <input type="password" class="form-control required" name="password" value="<?php echo $user['password']; ?>"
                                     placeholder="Enter Password">
                             </div>
 
                             <div class="row">
-                                <div class="col-xs-12 btn-group ml-2 ">
-                                    <input type="submit" id="action_add_product" 
-                                        class="btn btn-success float-right" name="submit" value="Add User"
-                                        data-loading-text="Adding...">
-                                        <a href="all-user.php"></a>
+                                <div class="col-xs-12 btn-group ">
+                                    <input type="submit" id="action_add_product" name="update_user" class="btn btn-success float-right mr-2" value="Update Product" data-loading-text="Adding...">
+                                    <a href="all-user.php" class="btn btn-primary float-right">Go Back</a>
                                 </div>
                             </div>
                         </div>                                

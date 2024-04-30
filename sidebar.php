@@ -65,7 +65,8 @@
 </li>
 
 
-    <a href="logout.php" class="logout-btn ml-3">Logout</a>
+<a href="logout.php" class="logout-btn ml-3 custom-logout">Logout</a>
+
 </ul>
 
 <div id="content-wrapper" class="d-flex flex-column">

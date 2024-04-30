@@ -3,6 +3,12 @@ require 'db_conn.php';
 
 $select = mysqli_query($conn, "SELECT * FROM customer");
 
+if(isset($_GET['delete'])){
+    $id = $_GET['delete'];
+    mysqli_query($conn, "DELETE FROM customer WHERE id = $id");
+    header('location: customer.php');
+}
+
 
 ?>
 
@@ -37,7 +43,7 @@ $select = mysqli_query($conn, "SELECT * FROM customer");
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
                 <h6 class="m-0 font-weight-bold text-white">Customer List</h6>
                 <div class="search-box-customer d-flex align-items-center ">
-                    <input type="text" class="mr-2" id="searchInputLeft" placeholder="Search customer..." onkeyup="searchCustomer()">
+                  <input type="text" class="mr-2" id="searchInputLeft" placeholder="Search customer..." onkeyup="searchCustomer()">
                 </div>
             </div>
         </div>    
@@ -51,7 +57,8 @@ $select = mysqli_query($conn, "SELECT * FROM customer");
                                     <th>ID</th>
                                     <th>Name</th>
                                     <th>Phone Number</th>
-                                    <th>Address</th>                                
+                                    <th>Address</th>   
+                                    <th>Action</th>                             
                                 </tr>
                             </thead>
                             <tfoot>
@@ -59,7 +66,8 @@ $select = mysqli_query($conn, "SELECT * FROM customer");
                                     <th>ID</th>
                                     <th>Name</th>
                                     <th>Phone Number</th>
-                                    <th>Address</th>    
+                                    <th>Address</th> 
+                                    <th>Action</th>    
                                 </tr>
                             </tfoot>
                             <?php
@@ -74,10 +82,10 @@ $select = mysqli_query($conn, "SELECT * FROM customer");
                                 <th><?php echo $row['customer_num']; ?></th>
                                 <th><?php echo $row['address']; ?></th>
                                 
-                                <!-- <th>
-                                    <a href="admin-update.php?edit=<?php echo $row['id']; ?>" class="btn btn-success btn-block mb-1"> <i class="fas fa-edit"></i> EDIT </a>
-                                    <a href="manage-product.php?delete=<?php echo $row['id']; ?>" class="btn btn-danger btn-block "> <i class="fas fa-delete"></i> DELETE </a>
-                                </th> -->
+                                <th>
+                                    <a href="edit-customer.php?edit=<?php echo $row['id']; ?>" class="btn btn-success btn-block mb-1"> <i class="fas fa-edit"></i> EDIT </a>
+                                    <a href="customer.php?delete=<?php echo $row['id']; ?>" class="btn btn-danger btn-block "> <i class="fas fa-delete"></i> DELETE </a>
+                                </th>
                             </tr>
                         <?php
                             }

@@ -1,23 +1,45 @@
 <?php
+
 require 'db_conn.php';
 
-if(isset($_POST['submit'])){
+session_start();
+
+if (!isset($_GET['edit'])) {
+    echo "Customer ID is not provided.";
+    exit;
+}
+
+$id = $_GET['edit'];
+
+if(isset($_GET['edit'])){
+    $id = $_GET['edit'];
+    $select_customer = mysqli_query($conn, "SELECT * FROM customer WHERE id = $id");
+    $customer = mysqli_fetch_assoc($select_customer);
+    $_SESSION['edit_customer'] = $customer;
+
+    var_dump($_SESSION['edit_customer']);
+}
+
+
+if (isset($_POST['update_customer'])) {
+
     $customer_name = $_POST['customer_name'];
     $customer_num = $_POST['customer_num'];
     $address = $_POST['address'];
-    
-    if(empty($customer_name) || empty($customer_num) || empty($customer_num)){
-        echo '<script>alert("Please fill out all fields");</script>';
-    }else{
-        $insert = "INSERT INTO customer (customer_name, customer_num, address) 
-        VALUES ('$customer_name', '$customer_num', '$address')";
-        $upload = mysqli_query($conn, $insert);
 
-        if($upload){
-            echo '<script>alert("New customer added successfully!!");</script>';
-        }else{
-            echo '<script>alert("Could not add the customer");</script>';  
-            error_log("Error: " . $conn->error);
+    if (empty($customer_name) || empty($customer_num) || empty($address)) {
+        echo '<script>alert("Please fill out all fields");</script>';
+    } else {
+
+        $update = "UPDATE customer SET customer_name='$customer_name', customer_num='$customer_num', address='$address' WHERE id = $id";
+
+        $upload = mysqli_query($conn, $update);
+
+        if ($upload) {
+            header('location: customer.php');
+            exit;
+        } else {
+            echo '<script>alert("Could not update the customer");</script>';
         }
     }
 }
@@ -55,41 +77,29 @@ if(isset($_POST['submit'])){
                     <h3 class="panel-h3">Customer Information</h3>
                 </div>
                 <div class="panel-body form-group form-group-sm">
-                    <form method="post" id="add_product">
+                <form action="<?php echo $_SERVER['PHP_SELF'] . '?edit=' . $id; ?>" method="post" id="add_product">
                         <input type="hidden" name="action" value="add_product">
 
                         <div class="row">
                             <div class="col-xs-4 ml-5">
-                                <input type="text" class="form-control required"  name="customer_name"
+                                <input type="text" class="form-control required"  name="customer_name" value="<?php echo $customer['customer_name']; ?>"
                                     placeholder="Enter Customer Name" >
                             </div>
                             <div class="col-xs-4">
-                                <input type="text" class="form-control required" name="customer_num"
+                                <input type="text" class="form-control required" name="customer_num" value="<?php echo $customer['customer_num']; ?>"
                                     placeholder="Enter Customer Number">
                             </div>
                             <div class="col-xs-4 ml-1">
-                                <input type="text" class="form-control required" name="address"
+                                <input type="text" class="form-control required" name="address" value="<?php echo $customer['address']; ?>"
                                     placeholder="Enter Customer Address">
                             </div>
 
-                            <!-- <div class="row">
-                                <div class="col-xs-12 btn-group ml-2 ">
-                                    <input type="submit" id="action_add_product" 
-                                        class="btn btn-success float-right" name="submit" value="Add Customer"
-                                        data-loading-text="Adding..." >
-                                    
-                                </div>
-                            </div> -->
-
                             <div class="row">
-                                <div class="col-xs-12 btn-group ml-2">
-                                    <a href="customer.php" type="submit" id="action_add_product" 
-                                        class="btn btn-success float-right" name="submit" value="Add Customer"
-                                        data-loading-text="Adding...">Add Customer</a>
+                                <div class="col-xs-12 btn-group ">
+                                    <input type="submit" id="action_add_product" name="update_customer" class="btn btn-success float-right mr-2" value="Update Product" data-loading-text="Adding...">
+                                    <a href="customer.php" class="btn btn-primary float-right">Go Back</a>
                                 </div>
                             </div>
-
-                            
                         </div>                                
                     </form>
                 </div>

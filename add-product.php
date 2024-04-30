@@ -68,11 +68,11 @@ if(isset($_POST['submit'])){
                                     placeholder="Enter Product Name">
                             </div>
                             <div class="col-xs-4">
-                                <input type="number" class="form-control required" name="product_id"
+                                <input type="text" class="form-control required" name="product_id"
                                     placeholder="Enter Product ID#">
                             </div>
                             <div class="col-xs-4">
-                                <input type="number" class="form-control required" name="product_price"
+                                <input type="text" class="form-control required" name="product_price"
                                     placeholder="Enter Product Price">
                             </div>
                             <div class="col-xs-4">

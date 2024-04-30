@@ -12942,3 +12942,18 @@ body.sidebar-toggled footer.sticky-footer {
     height: 60%;
     text-align: center;
 }
+
+.custom-logout {
+    color:#e3e6f0;
+    font-size: 15px;
+    padding: .5rem 0;
+    margin: .125rem 0 0;
+}
+
+.custom-logout:hover{
+    color: #fff;
+    text-decoration: none;
+}
+
+
+

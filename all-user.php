@@ -1,9 +1,23 @@
 <?php
+session_start();
+
 require 'db_conn.php';
 
 $select = mysqli_query($conn, "SELECT * FROM users");
 
+if(isset($_GET['delete'])){
+    $id = $_GET['delete'];
+    mysqli_query($conn, "DELETE FROM users WHERE id = $id");
+    header('location: all-user.php');
+}
 
+// Store user data in session variables
+if(isset($_GET['edit'])){
+    $id = $_GET['edit'];
+    $select_user = mysqli_query($conn, "SELECT * FROM users WHERE id = $id");
+    $user = mysqli_fetch_assoc($select_user);
+    $_SESSION['edit_user'] = $user;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -35,7 +49,7 @@ $select = mysqli_query($conn, "SELECT * FROM users");
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
                 <h6 class="m-0 font-weight-bold text-white">User Information</h6>
                 <div class="search-box-customer d-flex align-items-center ">
-                    <input type="text" class="mr-2" id="searchInputUser" placeholder="Search user..." onkeyup="searchUser()">
+                <input type="text" class="mr-2" id="searchInputUser" placeholder="Search user..." onkeyup="searchUser()">
                 </div>
             </div>      
             <div class="card-body">
@@ -46,14 +60,16 @@ $select = mysqli_query($conn, "SELECT * FROM users");
                                 <tr>
                                     <th>ID</th>
                                     <th>Name</th>
-                                    <th>Username</th>                                
+                                    <th>Username</th>
+                                    <th>Action</th>                                
                                 </tr>
                             </thead>
                             <tfoot>
                                 <tr>
                                     <th>ID</th>
                                     <th>Name</th>
-                                    <th>Username</th>    
+                                    <th>Username</th>
+                                    <th>Action</th>     
                                 </tr>
                             </tfoot>
                             <?php
@@ -66,6 +82,10 @@ $select = mysqli_query($conn, "SELECT * FROM users");
                                 <th><?php echo $row['id']; ?></th>
                                 <th><?php echo $row['name']; ?></th>
                                 <th><?php echo $row['user_name']; ?></th>
+                                <th>
+                                    <a href="edit-user.php?edit=<?php echo $row['id']; ?>" class="btn btn-success btn-block mb-1"> <i class="fas fa-edit"></i> EDIT </a>
+                                    <a href="all-user.php?delete=<?php echo $row['id']; ?>" class="btn btn-danger btn-block "> <i class="fas fa-delete"></i> DELETE </a>
+                                </th>
                                 
                                 <!-- <th>
                                     <a href="admin-update.php?edit=<?php echo $row['id']; ?>" class="btn btn-success btn-block mb-1"> <i class="fas fa-edit"></i> EDIT </a>
