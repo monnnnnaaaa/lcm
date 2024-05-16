@@ -49,7 +49,7 @@ if(isset($_GET['delete'])){
                     <form method="POST" action="add.php">
                         <thead>
                             <tr>
-                                <th>Image</th>
+                                <th class="th-img">Image</th>
                                 <th>Product Name</th>
                                 <th>Item ID#</th>
                                 <th>Price</th>

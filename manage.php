@@ -15,12 +15,34 @@
     <link href="./css/sb-admin-2.min.css" rel="stylesheet">
 
 </head>
+    <style>
+    button {
+       
+        padding: 7px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    th.number-column, td.number-column {
+        width: 70%; /* Adjust this value as needed */
+    }
+
+    
+</style>
 <body id="page-top">
     <?php
     require 'sidebar.php';
     ?>
             
-     <div class="container-product-manage bg-white" id="productContainerManage">
+            <div class="container-product-manage bg-white" id="productContainerManage">
         <div class="card shadow mb-4">
             <div class="card-header py-3">
                 <h6 class="m-1 font-weight-bold text-white">Manage Quotation</h6>
@@ -30,43 +52,25 @@
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th>Region team</th>
-                                <th>Item #</th>
-                                <th>Description</th>
-                                <th>QTY</th>
-                                <th>Unit</th>
-                                <th>Unite Price</th>
-                                <th>Amount</th>
-                                <th>Total</th>
-                                
-                                <th>Issue Date</th>
-                                <th>Due Date</th>
-                                <th>Status</th>
+                                <th>Name</th>
+                                <th class="number-column">Number</th> <!-- Add class to target this column -->
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- <?php
-                            include 'db_operations.php';
-                            
-                            $quotations = getAllQuotations();
-                            
-                        
-                            foreach ($quotations as $quotation) {
-                                echo "<tr>";
-                                echo "<td>{$quotation['quotation_id']}</td>";
-                                echo "<td>{$quotation['customer_id']}</td>";
-                              
-                                echo "<td>{$quotation['issue_date']}</td>";
-                                echo "<td>{$quotation['due_date']}</td>";
-                                echo "<td>{$quotation['status']}</td>";
-                                echo "<td>";
-                                echo "<div><u>Edit</u></div>";
-                                echo "<div><u>Delete</u></div>";
-                                echo "</td>";
-                                echo "</tr>";
-                            }
-                            ?> -->
+                        <tr>
+                            <td rowspan="3">Monica</td>
+                            <td class="number-column">1</td> <!-- Add class to target this column -->
+                            <td><button>Edit</button> <button>Delete</button></td>
+                        </tr>
+                        <tr>
+                            <td class="number-column">2</td> <!-- Add class to target this column -->
+                            <td><button>Edit</button> <button>Delete</button></td>
+                        </tr>
+                        <tr>
+                            <td class="number-column">3</td> <!-- Add class to target this column -->
+                            <td><button>Edit</button> <button>Delete</button></td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>

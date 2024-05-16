@@ -1748,6 +1748,10 @@ pre code {
     border: 1px solid #e3e6f0
 }
 
+.table-bordered .th-img{
+    width: 12%;
+}
+
 .table-bordered td,
 .table-bordered th {
     border: 1px solid #e3e6f0

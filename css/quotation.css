@@ -67,18 +67,27 @@ body {
 }
 
 
-.input-container.add input {
-    width: 100%;
-    height: 150px;
+/* Hide the default file input */
+input[type="file"] {
+    display: none;
 }
 
-.input-group.bil{
-    margin-top: -25px;
+/* Style the custom file upload label */
+.custom-file-upload {
+    display: inline-block;
+    cursor: pointer;
 }
+
+/* Style the icon */
+.custom-file-upload img {
+    width: 50px; /* Adjust the size as needed */
+    height: auto;
+}
+
 
 table {
     border-collapse: collapse;
-    width: 97%;
+    width: 99%;
     background-color: #fff;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -122,10 +131,18 @@ img {
     display: block; 
 }
 .small-qty {
-    max-width: 50px;
+    max-width: 90px;
+}
+
+.product-desc{
+    width: 200px;
+}
+
+.unit-price {
+    width: 100px;
 }
 .product-input {
-    width: 55%;
+    width: 80%;
     padding: 8px;
     font-size: 14px;
     border: 1px solid #ddd;
@@ -183,8 +200,7 @@ th:nth-child(7), td:nth-child(7) {
     border: 1px solid #ccc;
     border-radius: 5px;
     outline: none;
-    /* width: 15%; */ /* Alisin ang width */
-    flex-grow: 1; /* Baguhin ito upang fill-in ang natitirang espasyo */
+    flex-grow: 1; 
 }
 
 .form-group select {
@@ -192,8 +208,7 @@ th:nth-child(7), td:nth-child(7) {
     border: 1px solid #ccc;
     border-radius: 5px;
     outline: none;
-    /* width: 10%; */ /* Alisin ang width */
-    flex-grow: 1; /* Baguhin ito upang fill-in ang natitirang espasyo */
+    flex-grow: 1; 
 }
 
 
@@ -215,49 +230,132 @@ th:nth-child(7), td:nth-child(7) {
   }
 
   .selected-product table{
-    width: 70%;
+    width: 100%;
   }
 
   /* Modal */
 .modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
+    display: none; 
+    position: fixed;
+    z-index: 1; 
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  
+    overflow: auto; 
+    background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0,0.4); 
   }
   
-  /* Modal Content/Box */
-  .modal-content {
+ /* Modal Content/Box */
+.modal-content {
     background-color: #fefefe;
-    margin: 15% auto; /* 15% from the top and centered */
+    margin: 10%;
+    margin-left: 20%;
     padding: 20px;
     border: 1px solid #888;
-    width: 80%; /* Could be more or less, depending on screen size */
+    width: 70%; 
   }
   
-  /* Close Button */
-  .close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
+  /* Modal Table */
+  .modal-content table {
+    width: 100%;
+    border-collapse: collapse;
   }
   
-  .close:hover,
-  .close:focus {
-    color: black;
-    text-decoration: none;
+  /* Modal Table Row */
+  .modal-content table tbody tr:hover {
+    background-color: #f0f0f0; 
+    cursor: pointer; 
+  }
+
+  
+  .search-box-customer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.search-box-customer input[type="text"] {
+    padding: 8px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+.search-box-customer input[type="text"]:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.select-product {
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 16px;
     cursor: pointer;
-  }
-  
+}
 
+.select-product:hover {
+    background-color: #0056b3;
+}
 
- 
+.input-form {
+    display: flex;
+    flex-wrap: nowrap; /* Ensures all items are on the same line */
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
 
+.input-form-detail {
+    flex: 0 0 calc(17.80% - 5px); /* Adjusted width for each input */
+    margin-right: 2px; 
+    
+}
 
+.input-form-detail:last-child {
+    margin-right: 0; /* Remove margin from the last input */
+}
+
+.input-form-detail label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.input-form-detail select, 
+.input-form-detail input[type="text"],
+.input-form-detail input[type="number"] {
+    width: calc(100% - 22px); /* Adjusted width for input */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: border-color 0.3s;
+}
+
+.input-form-detail input[type="text"]:focus,
+.input-form-detail input[type="number"]:focus,
+.input-form-detail select:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+.button-form {
+    width: 60%;
+    flex: 0 0 calc(16.66% - 10px); 
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 29px; 
+}
+
+.button-form:hover {
+    background-color: #0056b3;
+}

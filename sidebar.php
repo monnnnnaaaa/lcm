@@ -19,7 +19,7 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown" >
             <a class="dropdown-item" href="./manage.php">Manage Quatation</a>
-            <a class="dropdown-item" href="./create.php">Create Quatation </a>
+            <a class="dropdown-item" href="./create-quotation.php">Create Quatation </a>
         </div>
     </li>
 
