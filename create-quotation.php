@@ -48,6 +48,7 @@ if (isset($_POST['save_quotation'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
+
     <title>Quotation | Create</title>
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
@@ -56,6 +57,8 @@ if (isset($_POST['save_quotation'])) {
     <link href="./css/sb-admin-2.min.css" rel="stylesheet">
     <link rel="stylesheet" href="./css/quotation.css">
     <script src="js/quotation.js"></script>
+
+
 </head> 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
 <body id="page-top">
@@ -159,7 +162,6 @@ if (isset($_POST['save_quotation'])) {
         </table> 
 
         <div class="container-form">
-
             <div class="form-group">
                 <label for="sub-total"><strong>Sub-total</strong></label>
                 <input type="text" name="quotation_stotal" id="subTotalInput" >
@@ -192,10 +194,6 @@ if (isset($_POST['save_quotation'])) {
 
     </form>
     <script>
-        $(document).ready(function() {
-            $('.select2').select2();
-        });
-        
         document.getElementById('product').addEventListener('change', function() {
             var selectedOption = this.options[this.selectedIndex];
             var description = selectedOption.getAttribute('data-description');
@@ -295,7 +293,6 @@ if (isset($_POST['save_quotation'])) {
             document.getElementById('grandTotalInput').value = grandTotal.toLocaleString('en-PH', { style: 'currency', currency: 'PHP' });
         }
     </script>
-
 </body>
 </html>
  
