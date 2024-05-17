@@ -295,7 +295,5 @@ if (isset($_POST['save_quotation'])) {
             document.getElementById('grandTotalInput').value = grandTotal.toLocaleString('en-PH', { style: 'currency', currency: 'PHP' });
         }
     </script>
-
 </body>
 </html>
- 

@@ -27,20 +27,17 @@ if(isset($_POST['submit'])){
 <html lang="en">
 
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-
     <title>Add Customer</title>
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
-
 </head>
 
 <body id="page-top">
@@ -71,32 +68,20 @@ if(isset($_POST['submit'])){
                                 <input type="text" class="form-control required" name="address"
                                     placeholder="Enter Customer Address">
                             </div>
-
-                            <!-- <div class="row">
-                                <div class="col-xs-12 btn-group ml-2 ">
-                                    <input type="submit" id="action_add_product" 
-                                        class="btn btn-success float-right" name="submit" value="Add Customer"
-                                        data-loading-text="Adding..." >
-                                    
-                                </div>
-                            </div> -->
-
                             <div class="row">
                                 <div class="col-xs-12 btn-group ml-2">
                                     <a href="customer.php" type="submit" id="action_add_product" 
                                         class="btn btn-success float-right" name="submit" value="Add Customer"
                                         data-loading-text="Adding...">Add Customer</a>
                                 </div>
-                            </div>
-
-                            
+                            </div>                  
                         </div>                                
                     </form>
                 </div>
             </div>
         </div>
     <div>
+
     <script src="js/user.js"></script>      
-    
 </body>
 </html>

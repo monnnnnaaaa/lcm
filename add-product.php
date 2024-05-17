@@ -1,10 +1,8 @@
 <?php
 require 'db_conn.php';
 
-// Check if the form is submitted
 if(isset($_POST['submit'])){
 
-    // Retrieve form data
     $product_name = $_POST['product_name'];
     $product_id = $_POST['product_id'];
     $product_price = $_POST['product_price'];
@@ -14,16 +12,13 @@ if(isset($_POST['submit'])){
     $product_img_tmp_name = $_FILES['product_img']['tmp_name'];
     $product_img_folder = 'img/' .$product_img;
 
-    // Check if any field is empty
     if(empty($product_name) || empty($product_id) || empty($product_price) || empty($product_description) || empty($product_category) || empty($product_img)){
         echo '<script>alert("Please fill out all fields");</script>';
     } else {
-        // Insert data into the database
         $insert = "INSERT INTO product (product_name, product_id, product_price, product_description, product_category, product_img) 
         VALUES ('$product_name', '$product_id', '$product_price', '$product_description', '$product_category', '$product_img')";
         $upload = mysqli_query($conn, $insert);
 
-        // Check if insertion was successful
         if($upload){
             move_uploaded_file($product_img_tmp_name, $product_img_folder);
             echo '<script>alert("New product added successfully!");</script>';
@@ -43,7 +38,6 @@ if(isset($_POST['submit'])){
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-
     <title>LCM</title>
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
@@ -119,6 +113,5 @@ if(isset($_POST['submit'])){
     </div>
 
     <script src="js/products.js"></script>
-
 </body>
 </html>

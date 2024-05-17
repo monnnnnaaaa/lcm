@@ -24,7 +24,6 @@ if (isset($_POST['submit'])) {
     $delivery_fee = ($charge === 'labor_install') ? NULL : $_POST['delivery_fee'];
     $grand_total = $_POST['grand_total'];
 
-    // File upload handling
     $target_dir = "uploads/";
     $target_file = $target_dir . basename($_FILES["q_img"]["name"]);
     $uploadOk = 1;
@@ -63,7 +62,6 @@ if (isset($_POST['submit'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-
     <title>Quotation | Create</title>
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
@@ -72,8 +70,6 @@ if (isset($_POST['submit'])) {
     <link href="./css/sb-admin-2.min.css" rel="stylesheet">
     <link rel="stylesheet" href="./css/quotation.css">
     <script src="js/quotation.js"></script>
-
-
 </head>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
 <body id="page-top">
     <?php
@@ -249,6 +245,6 @@ if (isset($_POST['submit'])) {
         </div>
     </form>
 
-<script src="./js/quotation.js"></script>
+    <script src="./js/quotation.js"></script>
 </body>
 </html>

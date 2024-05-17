@@ -4534,11 +4534,13 @@ input[type=submit].btn-block {
     
 }
 
-
-
 .navbar-nav .nav-link {
     padding-right: 0;
     padding-left: 0
+}
+
+.nav-item.active .nav-link {
+    color: white !important;
 }
 
 .navbar-nav .dropdown-menu {
@@ -11541,7 +11543,8 @@ a:focus {
 }
 
 .sidebar .nav-item.active .nav-link {
-    font-weight: 700
+    font-weight: 700;
+    
 }
 
 .sidebar .nav-item .collapse {

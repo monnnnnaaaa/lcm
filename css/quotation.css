@@ -58,29 +58,26 @@ body {
 
 .input-container.date-time {
     flex: 1;
-    margin-left: 100px; /* Adjust margin as needed */
+    margin-left: 100px; 
 }
 
 .input-container.for input,
 .input-container.date-time input {
-    width: calc(80% - 30px); /* Adjust width to leave some space */
+    width: calc(80% - 30px);
 }
 
-
-/* Hide the default file input */
 input[type="file"] {
     display: none;
 }
 
-/* Style the custom file upload label */
 .custom-file-upload {
     display: inline-block;
     cursor: pointer;
 }
 
-/* Style the icon */
+
 .custom-file-upload img {
-    width: 50px; /* Adjust the size as needed */
+    width: 50px; 
     height: auto;
 }
 
@@ -305,19 +302,19 @@ th:nth-child(7), td:nth-child(7) {
 
 .input-form {
     display: flex;
-    flex-wrap: nowrap; /* Ensures all items are on the same line */
+    flex-wrap: nowrap; 
     justify-content: space-between;
     margin-bottom: 20px;
 }
 
 .input-form-detail {
-    flex: 0 0 calc(17.80% - 5px); /* Adjusted width for each input */
+    flex: 0 0 calc(17.80% - 5px); 
     margin-right: 2px; 
     
 }
 
 .input-form-detail:last-child {
-    margin-right: 0; /* Remove margin from the last input */
+    margin-right: 0;
 }
 
 .input-form-detail label {
@@ -329,7 +326,7 @@ th:nth-child(7), td:nth-child(7) {
 .input-form-detail select, 
 .input-form-detail input[type="text"],
 .input-form-detail input[type="number"] {
-    width: calc(100% - 22px); /* Adjusted width for input */
+    width: calc(100% - 22px); 
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
