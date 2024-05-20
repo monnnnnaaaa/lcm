@@ -86,43 +86,6 @@ if (isset($_POST['save_quotation'])) {
             <input type="date" id="q-date" name="quotation_expires" value="<?php echo $quotation['quotation_expires']; ?>">
         </div>
 
-        <div class="input-form" id="dynamicFields">
-            <div class="input-form-detail">
-                <label for="product">Product</label>
-                <select id="productSelect" name="quotation_product[]">
-                    <option value="" disabled>Select a product</option>
-                    <?php
-                    while ($product = mysqli_fetch_assoc($product_result)) {
-                        $selected = ($product['product_id'] == $quotation['quotation_product']) ? 'selected' : '';
-                        echo "<option value='{$product['product_id']}' data-description='{$product['product_description']}' data-item='{$product['product_id']}' data-img='{$product['product_img']}' data-price='{$product['product_price']}' $selected>{$product['product_name']}</option>";
-                    }
-                    ?>
-                </select>
-            </div>
-            <div class="input-form-detail">
-                <label for="description">Description</label>
-                <input type="text" id="description" name="quotation_description[]" value="<?php echo $quotation['quotation_description']; ?>" readonly>
-            </div>
-            <div class="input-form-detail">
-                <label for="item">Item #</label>
-                <input type="text" id="item" name="quotation_item[]" value="<?php echo $quotation['quotation_item']; ?>"readonly>
-            </div>
-
-            <div class="input-form-detail">
-                <label for="quantity">Quantity</label>
-                <input type="number" id="quantity" name="quotation_qty[]" value="<?php echo $quotation['quotation_qty']; ?>">
-            </div>
-            <div class="input-form-detail">
-                <label for="unit">Unit</label>
-                <select id="unitSelect" name="quotation_unit[]">
-                    <option value="pieces" <?php if ($quotation['quotation_unit'] == 'pieces') echo 'selected'; ?>>Pieces</option>
-                </select>
-            </div>
-            <div class="input-form-detail">
-                <button class="button-form" type="button" onclick="addRow()">Add</button>
-            </div>
-        </div>
-
         <table>
             <thead>
                 <tr>
