@@ -11,7 +11,6 @@ if(isset($_GET['delete'])){
 
 $prevQuotationNum = null;
 $prevQuotationFor = null;
-
 ?>
 
 <!DOCTYPE html>
@@ -24,9 +23,7 @@ $prevQuotationFor = null;
     <meta name="author" content="">
     <title>LCM</title>
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/button.css">
 </head>
@@ -42,10 +39,8 @@ $prevQuotationFor = null;
                 <h6 class="m-1 font-weight-bold text-white">Quotation Information</h6>
             </div>
             <div class="card-body">
-
-                <div class="table-responsive" >
+                <div class="table-responsive">
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                    <form method="POST" action="add.php">
                         <thead>
                             <tr>
                                 <th>Quotation num</th>
@@ -94,7 +89,6 @@ $prevQuotationFor = null;
                             <?php
                             while ($row = mysqli_fetch_assoc($select)) {
                                 if ($row['quotation_num'] !== $prevQuotationNum || $row['quotation_for'] !== $prevQuotationFor) {
-                                    
                                     echo "<tr>";
                                     echo "<td>{$row['quotation_num']}</td>";
                                     echo "<td>{$row['quotation_for']}</td>";
@@ -115,11 +109,10 @@ $prevQuotationFor = null;
                                     echo "<td>{$row['quotation_expires']}</td>";
                                     echo "<td>";
                                     echo "<a href='update-quotation.php?id={$row['id']}' class='btn btn-success btn-block mb-1'><i class='fas fa-edit'></i> EDIT </a>";
-                                    echo "<a href='manage.php?delete={$row['id']}' class='btn btn-danger btn-block '><i class='fas fa-delete'></i> DELETE </a>";
+                                    echo "<a href='manage.php?delete={$row['id']}' class='btn btn-danger btn-block '><i class='fas fa-trash'></i> DELETE </a>";
                                     echo "</td>";
                                     echo "</tr>";
                                 } else {
-                                   
                                     echo "<tr>";
                                     echo "<td colspan='3'></td>"; 
                                     echo "<td><img src='img/{$row['quotation_pimage']}' height='100' alt=''></td>";
@@ -153,6 +146,5 @@ $prevQuotationFor = null;
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
-    <script src="js/products.js"></script>
 </body>
 </html>

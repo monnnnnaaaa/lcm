@@ -190,7 +190,9 @@ if (isset($_POST['save_quotation'])) {
 
         <div class="button-container">
             <button id="addButton" type="submit" name="save_quotation">Save Quotation</button>
+            <button id="addButton" type="submit" name="save_word">Save as Word</button>
         </div>
+        
 
     </form>
     <script>

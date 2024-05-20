@@ -1,8 +1,13 @@
 <?php
 require 'db_conn.php';
 
-$sql = "SELECT * FROM product";
-$result = mysqli_query($conn, $sql);
+$id = $_GET['id'];
+$query = "SELECT * FROM quotation_list WHERE id = $id";
+$result = mysqli_query($conn, $query);
+$quotation = mysqli_fetch_assoc($result);
+
+$product_query = "SELECT *, 1 AS quantity, 'pieces' AS unit FROM product"; // Replace '1' and 'pieces' with actual default values or adjust as needed
+$product_result = mysqli_query($conn, $product_query);
 
 if (isset($_POST['save_quotation'])) {
     $quotation_num = $_POST['quotation_num'];
@@ -15,22 +20,17 @@ if (isset($_POST['save_quotation'])) {
     $quotation_date = $_POST['quotation_date'];
     $quotation_expires = $_POST['quotation_expires'];
 
-    $sql_quotation = "INSERT INTO quotation_list (quotation_num, quotation_for, quotation_billing, quotation_stotal, quotation_vat, quotation_charge, quotation_grandtotal, quotation_date, quotation_expires, quotation_pimage, quotation_product, quotation_description, quotation_item, quotation_qty, quotation_unit, quotation_uprice, quotation_amount) VALUES ";
-
-    foreach ($_POST['quotation_product'] as $key => $product_id) {
-        $sql_product = "SELECT * FROM product WHERE product_id = '$product_id'";
-        $result_product = mysqli_query($conn, $sql_product);
-        $product = mysqli_fetch_assoc($result_product);
-    
-        $quantity = $_POST['quotation_qty'][$key];
-        $unit = $_POST['quotation_unit'][$key];
-    
-        $total_amount = $quantity * $product['product_price'];
-    
-        $sql_quotation .= "('$quotation_num', '$quotation_for', '$quotation_billing', '$quotation_stotal', '$quotation_vat', '$quotation_charge', '$quotation_grandtotal', '$quotation_date', '$quotation_expires', '{$product['product_img']}' , '{$product['product_id']}', '{$product['product_description']}', '{$product['product_name']}', '$quantity', '$unit', '{$product['product_price']}', '$total_amount'),";
-    }
-    
-    $sql_quotation = rtrim($sql_quotation, ",");
+    $sql_quotation = "UPDATE quotation_list SET 
+        quotation_num='$quotation_num', 
+        quotation_for='$quotation_for', 
+        quotation_billing='$quotation_billing', 
+        quotation_stotal='$quotation_stotal', 
+        quotation_vat='$quotation_vat', 
+        quotation_charge='$quotation_charge', 
+        quotation_grandtotal='$quotation_grandtotal', 
+        quotation_date='$quotation_date', 
+        quotation_expires='$quotation_expires' 
+        WHERE id=$id";
 
     mysqli_query($conn, $sql_quotation);
 
@@ -38,7 +38,6 @@ if (isset($_POST['save_quotation'])) {
     exit();
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -48,98 +47,82 @@ if (isset($_POST['save_quotation'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Quotation | Create</title>
+    <title>Quotation | Update</title>
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
     <link href="./css/sb-admin-2.min.css" rel="stylesheet">
     <link rel="stylesheet" href="./css/quotation.css">
-    <script src="js/quotation.js"></script>
 </head> 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
 <body id="page-top">
     <?php
     require 'sidebar.php';
     ?>
 
     <div class="container-quotation">
-        <h3>Create New Quotation</h3>
+        <h3>Update Quotation Information</h3>
     </div>
+    <form method="post" id="add_product" action="">
+        <input type="hidden" name="id" value="<?php echo $quotation['id']; ?>">
 
-    <form method="post" id="add_product">
-            <div class="input-container num">
-                <label for="quotationnum"><strong>Quotation no.</strong></label>
-                <input type="text" id="q-num" name="quotation_num">
-            </div>
-
-        <hr class="line">
-
-        <div class="input-group">
-            <div class="input-container for">
-                <label for="q-for"><strong>Quotation for</strong></label>
-                <input type="text" id="qfor" name="quotation_for">
-            </div>
-            <div class="input-container date-time">
-                <label for="q-date-time"><strong>Quotation Date:</strong></label>
-                <input type="date" id="q-date" name="quotation_date">
-            </div>  
+        <div class="input-container num">
+            <label for="quotationnum"><strong>Quotation no.</strong></label>
+            <input type="text" id="q-num" name="quotation_num" value="<?php echo $quotation['quotation_num']; ?>">
         </div>
 
-        <div class="input-group bil">
-            <div class="input-container for">
-                <label for="bill-add"><strong>Billing Address </strong></label>
-                <input type="text" id="bill" name="quotation_billing">
-            </div>
-            <div class="input-container date-time">
-                <label for="q-date-time"><strong>Quotation Expires:</strong></label>
-                <input type="date" id="q-date" name="quotation_expires">
-            </div>
+        <div class="input-container for">
+            <label for="q-for"><strong>Quotation for</strong></label>
+            <input type="text" id="qfor" name="quotation_for" value="<?php echo $quotation['quotation_for']; ?>">
+        </div>
+        <div class="input-container date-time">
+            <label for="q-date-time"><strong>Quotation Date:</strong></label>
+            <input type="date" id="q-date" name="quotation_date" value="<?php echo $quotation['quotation_date']; ?>">
+        </div>
+        <div class="input-container bil">
+            <label for="bill-add"><strong>Billing Address </strong></label>
+            <input type="text" id="bill" name="quotation_billing" value="<?php echo $quotation['quotation_billing']; ?>">
+        </div>
+        <div class="input-container date-time">
+            <label for="q-date-time"><strong>Quotation Expires:</strong></label>
+            <input type="date" id="q-date" name="quotation_expires" value="<?php echo $quotation['quotation_expires']; ?>">
         </div>
 
-        <hr class="line">
-
-        <div class="input-form">
+        <div class="input-form" id="dynamicFields">
             <div class="input-form-detail">
                 <label for="product">Product</label>
-                <select id="product" name="quotation_product">
-                    <option value="" disabled selected>Select a product</option>
+                <select id="productSelect" name="quotation_product[]">
+                    <option value="" disabled>Select a product</option>
                     <?php
-                    while($row = mysqli_fetch_assoc($result)) {
-                        echo "<option value='" . $row["product_id"] . "' data-description='" . $row["product_description"] . "' data-item='" . $row["product_id"] . "' data-img='" . $row["product_img"] . "' data-price='" . $row["product_price"] . "'>" . $row["product_name"] . "</option>";
+                    while ($product = mysqli_fetch_assoc($product_result)) {
+                        $selected = ($product['product_id'] == $quotation['quotation_product']) ? 'selected' : '';
+                        echo "<option value='{$product['product_id']}' data-description='{$product['product_description']}' data-item='{$product['product_id']}' data-img='{$product['product_img']}' data-price='{$product['product_price']}' $selected>{$product['product_name']}</option>";
                     }
-                    
-                    mysqli_free_result($result);
-                    mysqli_close($conn);
                     ?>
                 </select>
             </div>
             <div class="input-form-detail">
                 <label for="description">Description</label>
-                <input type="text" id="description" name="quotation_description" readonly>
+                <input type="text" id="description" name="quotation_description[]" value="<?php echo $quotation['quotation_description']; ?>" readonly>
             </div>
             <div class="input-form-detail">
                 <label for="item">Item #</label>
-                <input type="text" id="item" name="quotation_item" readonly>
+                <input type="text" id="item" name="quotation_item[]" value="<?php echo $quotation['quotation_item']; ?>"readonly>
             </div>
 
             <div class="input-form-detail">
                 <label for="quantity">Quantity</label>
-                <input type="number" id="quantity" name="quotation_qty">
+                <input type="number" id="quantity" name="quotation_qty[]" value="<?php echo $quotation['quotation_qty']; ?>">
             </div>
             <div class="input-form-detail">
                 <label for="unit">Unit</label>
-                <select id="unit" name="quotation_unit">
-                    <option value="" disabled selected>Select a unit</option>
-                    <option value="pieces">Pieces</option>                  
+                <select id="unitSelect" name="quotation_unit[]">
+                    <option value="pieces" <?php if ($quotation['quotation_unit'] == 'pieces') echo 'selected'; ?>>Pieces</option>
                 </select>
             </div>
-
             <div class="input-form-detail">
-                <button id="addButton" class="button-form">Add</button>
+                <button class="button-form" type="button" onclick="addRow()">Add</button>
             </div>
         </div>
-    
+
         <table>
             <thead>
                 <tr>
@@ -155,47 +138,109 @@ if (isset($_POST['save_quotation'])) {
                 </tr>
             </thead>
             <tbody id="tableBody">
+            
             </tbody>
-        </table> 
-
+        </table>
         <div class="container-form">
-
             <div class="form-group">
                 <label for="sub-total"><strong>Sub-total</strong></label>
-                <input type="text" name="quotation_stotal" id="subTotalInput" >
+                <input type="text" name="quotation_stotal" id="subTotalInput" value="<?php echo $quotation['quotation_stotal']; ?>">
             </div>
-
             <div class="form-group">
                 <label for="vat"><strong>VAT(7%)</strong></label>
-                <input type="text" name="quotation_vat" id="vatInput" >
+                <input type="text" name="quotation_vat" id="vatInput" value="<?php echo $quotation['quotation_vat']; ?>">
             </div>
-
             <div class="form-group">
                 <label for="charge"><strong>Charge</strong></label>
-                <input type="text" id="chargeInput" name="quotation_charge">
+                <input type="text" id="chargeInput" name="quotation_charge" value="<?php echo $quotation['quotation_charge']; ?>">
             </div>
-
             <div class="form-group">
                 <label for="grand-total"><strong>Grand Total</strong></label>
-                <input type="text" name="quotation_grandtotal" id="grandTotalInput" >
+                <input type="text" name="quotation_grandtotal" id="grandTotalInput" value="<?php echo $quotation['quotation_grandtotal']; ?>">
             </div>
-        </div>
-
-        <div class="input-container note">
-            <label for="quotationnum"><strong>Notes:</strong></label>
-            <input type="text" id="q-num" >
         </div>
 
         <div class="button-container">
             <button id="addButton" type="submit" name="save_quotation">Save Quotation</button>
         </div>
-
     </form>
+
     <script>
-        $(document).ready(function() {
-            $('.select2').select2();
+        document.getElementById('productSelect').addEventListener('change', function() {
+            var selectedOption = this.options[this.selectedIndex];
+            var description = selectedOption.getAttribute('data-description');
+            var item = selectedOption.getAttribute('data-item');
+            document.getElementById('description').value = description;
+            document.getElementById('item').value = item;
         });
-        
+
+        var tableRows = document.querySelectorAll("#tableBody tr");
+
+        tableRows.forEach(function(row) {
+            row.addEventListener("click", function() {
+                // Get data from cells in the clicked row
+                var cells = row.cells;
+                var productName = cells[1].textContent;
+                var description = cells[2].textContent;
+                var itemNumber = cells[3].textContent;
+                var quantity = cells[4].textContent;
+                var unit = cells[5].textContent;
+
+                // Set data to the input fields above the form
+                document.getElementById("productSelect").value = productName;
+                document.getElementById("description").value = description;
+                document.getElementById("item").value = itemNumber;
+                document.getElementById("quantity").value = quantity;
+                document.getElementById("unitSelect").value = unit;
+            });
+        });
+
+        function addRow() {
+            var selectedRow = document.querySelector("#tableBody .selected");
+
+            if (selectedRow) {
+                var cells = selectedRow.cells;
+                cells[1].innerText = document.getElementById("productSelect").value;
+                cells[2].innerText = document.getElementById("description").value;
+                cells[3].innerText = document.getElementById("item").value;
+                cells[4].innerText = document.getElementById("quantity").value;
+                cells[5].innerText = document.getElementById("unitSelect").value;
+
+                document.getElementById("productSelect").value = "";
+                document.getElementById("description").value = "";
+                document.getElementById("item").value = "";
+                document.getElementById("quantity").value = "";
+                document.getElementById("unitSelect").value = "";
+
+                selectedRow.classList.remove("selected");
+            } else {
+                var productSelect = document.getElementById("productSelect");
+                var selectedOption = productSelect.options[productSelect.selectedIndex];
+                var description = selectedOption.getAttribute("data-description");
+                var item = selectedOption.getAttribute("data-item");
+                var quantityInput = document.getElementById("quantity").value;
+                var unit = document.getElementById("unitSelect").value;
+
+                var newRow = "<tr>" +
+                                "<td></td>" +
+                                "<td>" + selectedOption.text + "</td>" +
+                                "<td><input type='text' name='quotation_description[]' value='" + description + "' readonly></td>" +
+                                "<td><input type='text' name='quotation_item[]' value='" + item + "' readonly></td>" +
+                                "<td><input type='number' name='quotation_qty[]' value='" + quantityInput + "'></td>" +
+                                "<td><input type='text' name='quotation_unit[]' value='" + unit + "' readonly></td>" +
+                                "<td></td>" +
+                                "<td></td>" +
+                                "<td><img src='https://img.icons8.com/ios/50/000000/delete.png' alt='Delete Icon' style='width: 20px; height: 20px; text-align:center;' onclick='deleteRow(this)'></td>" +
+                            "</tr>";
+
+                document.getElementById("tableBody").innerHTML += newRow;
+            }
+        }
+    </script>
+
+
+
+    <script>
         document.getElementById('product').addEventListener('change', function() {
             var selectedOption = this.options[this.selectedIndex];
             var description = selectedOption.getAttribute('data-description');

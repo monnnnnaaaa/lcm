@@ -9,6 +9,15 @@ if (!isset($_SESSION['user_name'])) {
 
 $user_name = $_SESSION['name'];
 
+$quotation_count_query = "SELECT COUNT(DISTINCT CONCAT(quotation_num, '-', quotation_for)) AS total_quotations FROM quotation_list";
+$quotation_count_result = mysqli_query($conn, $quotation_count_query);
+$total_quotations = 0;
+if ($quotation_count_result) {
+    $quotation_count_row = mysqli_fetch_assoc($quotation_count_result);
+    $total_quotations = $quotation_count_row['total_quotations'];
+}
+
+
 $product_count_query = "SELECT COUNT(*) AS total_products FROM product";
 $product_count_result = mysqli_query($conn, $product_count_query);
 $total_products = 0;
@@ -63,7 +72,7 @@ if ($customer_count_result) {
                                 <i class="fas fa-calendar fa-3x text-black-300 mt-2"></i>
                             </div>
                             <div class="col  mr-2">
-                                <div class="h5 mb-0 font-weight-bold text-gray-800"> </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $total_quotations; ?> </div>
                                     <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                         TOTAL QUOTATION
                                     </div>
