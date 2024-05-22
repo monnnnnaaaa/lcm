@@ -9,6 +9,22 @@ if(isset($_GET['delete'])){
     header('location: manage.php');
 }
 
+
+$quotationProducts = array();
+
+while ($row = mysqli_fetch_assoc($select)) {
+    $quotationNum = $row['quotation_num'];
+    
+    // Check if this quotation number already exists in the array
+    if (!isset($quotationProducts[$quotationNum])) {
+        // If not, create a new array for this quotation number
+        $quotationProducts[$quotationNum] = array();
+    }
+    
+    // Add the current product to the array for this quotation number
+    $quotationProducts[$quotationNum][] = $row;
+}
+
 $prevQuotationNum = null;
 $prevQuotationFor = null;
 ?>
@@ -86,56 +102,40 @@ $prevQuotationFor = null;
                             </tr>
                         </tfoot>
                         <tbody>
-                            <?php
-                            while ($row = mysqli_fetch_assoc($select)) {
-                                if ($row['quotation_num'] !== $prevQuotationNum || $row['quotation_for'] !== $prevQuotationFor) {
-                                    echo "<tr>";
-                                    echo "<td>{$row['quotation_num']}</td>";
-                                    echo "<td>{$row['quotation_for']}</td>";
-                                    echo "<td>{$row['quotation_billing']}</td>";
-                                    echo "<td><img src='img/{$row['quotation_pimage']}' height='100' alt=''></td>";
-                                    echo "<td>{$row['quotation_product']}</td>";
-                                    echo "<td>{$row['quotation_description']}</td>";
-                                    echo "<td>{$row['quotation_item']}</td>";
-                                    echo "<td>{$row['quotation_qty']}</td>";
-                                    echo "<td>{$row['quotation_unit']}</td>";
-                                    echo "<td>{$row['quotation_uprice']}</td>";
-                                    echo "<td>{$row['quotation_amount']}</td>";
-                                    echo "<td>{$row['quotation_stotal']}</td>";
-                                    echo "<td>{$row['quotation_vat']}</td>";
-                                    echo "<td>{$row['quotation_charge']}</td>";
-                                    echo "<td>{$row['quotation_grandtotal']}</td>";
-                                    echo "<td>{$row['quotation_date']}</td>";
-                                    echo "<td>{$row['quotation_expires']}</td>";
-                                    echo "<td>";
-                                    echo "<a href='update-quotation.php?id={$row['id']}' class='btn btn-success btn-block mb-1'><i class='fas fa-edit'></i> EDIT </a>";
-                                    echo "<a href='manage.php?delete={$row['id']}' class='btn btn-danger btn-block '><i class='fas fa-trash'></i> DELETE </a>";
-                                    echo "</td>";
-                                    echo "</tr>";
-                                } else {
-                                    echo "<tr>";
-                                    echo "<td colspan='3'></td>"; 
-                                    echo "<td><img src='img/{$row['quotation_pimage']}' height='100' alt=''></td>";
-                                    echo "<td>{$row['quotation_product']}</td>";
-                                    echo "<td>{$row['quotation_description']}</td>";
-                                    echo "<td>{$row['quotation_item']}</td>";
-                                    echo "<td>{$row['quotation_qty']}</td>";
-                                    echo "<td>{$row['quotation_unit']}</td>";
-                                    echo "<td>{$row['quotation_uprice']}</td>";
-                                    echo "<td>{$row['quotation_amount']}</td>";
-                                    echo "<td>{$row['quotation_stotal']}</td>";
-                                    echo "<td>{$row['quotation_vat']}</td>";
-                                    echo "<td>{$row['quotation_charge']}</td>";
-                                    echo "<td>{$row['quotation_grandtotal']}</td>";
-                                    echo "<td>{$row['quotation_date']}</td>";
-                                    echo "<td>{$row['quotation_expires']}</td>";
-                                    echo "<td colspan='7'></td>"; 
-                                }
-                                
-                                $prevQuotationNum = $row['quotation_num'];
-                                $prevQuotationFor = $row['quotation_for'];
-                            }
-                            ?>
+                        <?php 
+    // Iterate over $quotationProducts to display products grouped by quotation number
+    foreach ($quotationProducts as $quotationNum => $products) {
+        foreach ($products as $product) {
+?>
+            <tr>
+                <td><?php echo $quotationNum; ?></td>
+                <td><?php echo $product['quotation_for']; ?></td>
+                <td><?php echo $product['quotation_billing']; ?></td>
+                <td><img src='img/<?php echo $product['quotation_pimage']; ?>' height='100' alt=''></td>
+                <td><?php echo $product['quotation_item']; ?></td>
+                <td><?php echo $product['quotation_description']; ?></td>
+                <td><?php echo $product['quotation_product']; ?></td>
+                <td><?php echo $product['quotation_qty']; ?></td>
+                <td><?php echo $product['quotation_unit']; ?></td>
+                <td><?php echo $product['quotation_uprice']; ?></td>
+                <td><?php echo $product['quotation_amount']; ?></td>
+                <td><?php echo str_replace('₱', '', $product['quotation_stotal']); ?></td>
+                <td><?php echo str_replace('₱', '', $product['quotation_vat']); ?></td>
+                <td><?php echo str_replace('₱', '', $product['quotation_charge']); ?></td>
+                <td><?php echo str_replace('₱', '', $product['quotation_grandtotal']); ?></td>
+                <td><?php echo $product['quotation_date']; ?></td>
+                <td><?php echo $product['quotation_expires']; ?></td>
+                <td>
+                    <a href='update-quotation.php?id=<?php echo $product['id']; ?>' class='btn btn-success btn-block mb-1'><i class='fas fa-edit'></i> EDIT </a>
+                    <a href='manage.php?delete=<?php echo $product['id']; ?>' class='btn btn-danger btn-block '><i class='fas fa-trash'></i> DELETE </a>
+                    <a href='download-pdf.php?id=<?php echo $product['id']; ?>' class='btn btn-danger btn-block '><i class='fas fa-download'></i> DOWNLOAD </a>
+                </td>
+            </tr>
+<?php 
+        }
+    }
+?>
+
                         </tbody>
                     </table>
                 </div>

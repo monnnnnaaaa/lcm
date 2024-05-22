@@ -199,5 +199,109 @@ if (isset($_POST['save_quotation'])) {
                 document.getElementById("tableBody").innerHTML += newRow;
             }
         }
+    </script>
+
+
+
+    <script>
+        document.getElementById('product').addEventListener('change', function() {
+            var selectedOption = this.options[this.selectedIndex];
+            var description = selectedOption.getAttribute('data-description');
+            var item = selectedOption.getAttribute('data-item');
+            document.getElementById('description').value = description;
+            document.getElementById('item').value = item;
+        });
+
+        document.getElementById('addButton').addEventListener('click', function(event) {
+            event.preventDefault();
+
+            var quantityValue = document.getElementById('quantity').value;
+            var unitValue = document.getElementById('unit').value;
+            var productSelect = document.getElementById('product');
+            var selectedOption = productSelect.options[productSelect.selectedIndex];
+            var price = parseFloat(selectedOption.getAttribute('data-price'));
+            var quantity = parseInt(document.getElementById('quantity').value);
+            var unit = document.getElementById('unit').value;
+            var amount = quantity * price;
+
+            var rowData = {
+                productId: selectedOption.value,
+                productName: selectedOption.text,
+                description: selectedOption.getAttribute('data-description'),
+                itemNumber: selectedOption.getAttribute('data-item'),
+                quantity: quantity,
+                unit: unit,
+                unitPrice: price.toFixed(2),
+                amount: amount
+            };
+
+            appendHiddenInput('quotation_product[]', rowData.productId);
+            appendHiddenInput('quotation_description[]', rowData.description);
+            appendHiddenInput('quotation_item[]', rowData.itemNumber);
+            appendHiddenInput('quotation_qty[]', rowData.quantity);
+            appendHiddenInput('quotation_unit[]', rowData.unit);
+            appendHiddenInput('quotation_uprice[]', rowData.unitPrice);
+            appendHiddenInput('quotation_amount[]', rowData.amount);
+
+            var newRow = document.createElement('tr');
+            newRow.innerHTML = "<td><img src='img/" + selectedOption.getAttribute('data-img') + "' alt='Product Image'></td>" +
+                "<td>" + selectedOption.text + "</td>" +
+                "<td>" + selectedOption.getAttribute('data-description') + "</td>" +
+                "<td>" + selectedOption.getAttribute('data-item') + "</td>" +
+                "<td>" + quantity + "</td>" +
+                "<td>" + unit + "</td>" +
+                "<td>" + price.toFixed(2) + "</td>" +
+                "<td class='amount'>" + amount.toLocaleString('en-PH', { style: 'currency', currency: 'PHP' }) + "</td>" +
+                "<td><img src='https://img.icons8.com/ios/50/000000/delete.png' alt='Delete Icon' style='width: 20px; height: 20px; text-align:center;' onclick='deleteRow(this)'></td>";
+
+
+            var tableBody = document.getElementById('tableBody');
+            tableBody.appendChild(newRow);
+
+            updateTotals();
+
+            document.getElementById('quantity').value = '';
+            document.getElementById('unit').value = '';
+            document.getElementById('description').value = '';
+            document.getElementById('item').value = '';
+            document.getElementById('product').selectedIndex = 0;
+        });
+
+        function appendHiddenInput(name, value) {
+            var input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = name;
+            input.value = value;
+            document.getElementById('add_product').appendChild(input);
+        }
+
+        function deleteRow(imgElement) {
+            var row = imgElement.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+            updateTotals();
+        }
+
+        document.getElementById('chargeInput').addEventListener('input', function() {
+            updateTotals();
+        });
+
+        function updateTotals() {
+            var amounts = document.getElementsByClassName('amount');
+            var subTotal = 0;
+
+            for (var i = 0; i < amounts.length; i++) {
+                var amountText = amounts[i].innerText.replace(/[^\d.-]/g, ''); // Remove any non-numeric characters
+                subTotal += parseFloat(amountText);
+            }
+
+            var vat = subTotal * 0.07;
+            var charge = parseFloat(document.getElementById('chargeInput').value) || 0;
+            var grandTotal = subTotal + vat + charge;
+
+            document.getElementById('subTotalInput').value = subTotal.toLocaleString('en-PH', { style: 'currency', currency: 'PHP' });
+            document.getElementById('vatInput').value = vat.toLocaleString('en-PH', { style: 'currency', currency: 'PHP' });
+            document.getElementById('grandTotalInput').value = grandTotal.toLocaleString('en-PH', { style: 'currency', currency: 'PHP' });
+        }
+    </script>
 </body>
 </html>

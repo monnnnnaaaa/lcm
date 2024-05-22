@@ -1,5 +1,21 @@
 <?php
 require('fpdf/fpdf.php');
+require 'db_conn.php';
+
+if (!isset($_GET['id'])) {
+    die("Quotation ID is required.");
+}
+
+$quotation_id = $_GET['id'];
+
+$query = "SELECT * FROM quotation_list WHERE id = $quotation_id";
+$result = mysqli_query($conn, $query);
+
+if (mysqli_num_rows($result) == 0) {
+    die("Quotation not found.");
+}
+
+$quotation = mysqli_fetch_assoc($result);
 
 class PDF extends FPDF
 {
@@ -7,6 +23,8 @@ class PDF extends FPDF
 
     function Header()
     {
+        global $quotation;
+        
         // Image
         $this->Image('img/logo.png', 10, 10, 30);
         
@@ -30,10 +48,10 @@ class PDF extends FPDF
         // Quotation number and date
         $this->SetY($this->GetY() + 5);
         $this->SetFont('Arial', 'B', 12);
-        $this->Cell(0, 5, 'Quotation Number: 28815', 0, 0, 'L');
+        $this->Cell(0, 5, 'Quotation Number: ' . $quotation['quotation_num'], 0, 0, 'L');
         $this->SetFont('Arial', '', 12);
-        $this->Cell(0, 5, 'Quotation Date: May 21, 2024', 0, 1, 'R');
-        
+        $this->Cell(0, 5, 'Quotation Date: ' . date('m/d/Y', strtotime($quotation['quotation_date'])), 0, 1, 'R');
+
         // Thin line
         $this->SetY($this->GetY() + 5);
         $this->SetDrawColor(0, 0, 0);
@@ -48,78 +66,93 @@ class PDF extends FPDF
 
         $this->SetY($this->GetY() + 3);
         $this->SetFont('Arial', 'B', 12);
-        $this->Cell(0, 5, 'BRGY BULIHAN, SILANG, CAVITE', 0, 0, 'L');
+        $this->Cell(0, 5, $quotation['quotation_for'], 0, 0, 'L');
         $this->SetFont('Arial', '', 12);
-        $this->Cell(0, 5, 'BRGY BULIHAN, SILANG, CAVITE', 0, 1, 'R');
+        $this->Cell(0, 5, $quotation['quotation_billing'], 0, 1, 'R');
 
         // Quotation expires
         $this->SetY($this->GetY() + 15);
-        $this->Cell(0, 5, 'Quotation Expires: May 30, 2024', 0, 1, 'L');
+        $this->Cell(0, 5, 'Quotation Expires: ' . date('m/d/Y', strtotime($quotation['quotation_expires'])), 0, 1, 'L');
+
     }
 
     function Table()
     {
+        global $conn, $quotation;
+    
         // Column widths
         $this->SetY($this->GetY() + 5);
         $widths = array(30, 70, 20, 15, 15, 20, 20);
         
         // Set fill color for the header row (gray)
         $this->SetFillColor(200, 200, 200);
-
+    
         // Table header
         $headerHeight = 10;
         $this->SetFont('Arial', 'B', 11);
-        $header = array('Image', 'Description', 'Item #', 'Qty', 'Unit', 'Unit Price', 'Amount');
+        $header = array('', 'Description', 'Item #', 'Qty', 'Unit', 'Unit Price', 'Amount');
         for ($i = 0; $i < count($header); $i++) {
             $this->Cell($widths[$i], $headerHeight, $header[$i], 0, 0, 'C', true);
         }
         $this->Ln();
-
+        
         // Table body
         $this->SetY($this->GetY() + 3);
         $this->SetFont('Arial', '', 10);
-        foreach ($this->items as $row) {
-            // Image column
-            $this->Cell($widths[0], 30, $this->Image($row['image_path'], $this->GetX(), $this->GetY(), 30), 0);
-            
-            // Text columns
-            $this->Cell($widths[1], 30, $row['description'], 0);
-            $this->Cell($widths[2], 30, $row['item_number'], 0);
-            $this->Cell($widths[3], 30, $row['qty'], 0);
-            $this->Cell($widths[4], 30, $row['unit'], 0);
-            $this->Cell($widths[5], 30, $row['unit_price'], 0);
-            $this->Cell($widths[6], 30, $row['amount'], 0);
-            
+
+        // Retrieve all products associated with the same quotation number
+        $quotationNum = $quotation['quotation_num'];
+        $productQuery = "SELECT * FROM quotation_list WHERE quotation_num = '$quotationNum'";
+        $productResult = mysqli_query($conn, $productQuery);
+
+        // Loop through each product and add it to the table
+        while ($product = mysqli_fetch_assoc($productResult)) {
+            $this->Cell($widths[0], 30, $this->Image('img/' . $product['quotation_pimage'], $this->GetX(), $this->GetY(), 30), 0);
+            // Save current position
+            $startX = $this->GetX();
+            $startY = $this->GetY();
+            // Move to next cell
+            $this->SetXY($startX + 5, $startY);
+            // Reduce margin top for the first cell
+            $this->MultiCell($widths[1], 10, $product['quotation_item'] . "\n" . $product['quotation_description'], 0);
+            // Restore original position and move to next cell
+            $this->SetXY($startX + $widths[0], $startY);
+            $this->SetX($this->GetX() + 45);
+            $this->Cell($widths[2], 30, $product['quotation_product'], 0);
+            $this->Cell($widths[3], 30, $product['quotation_qty'], 0);
+            $this->Cell($widths[4], 30, $product['quotation_unit'], 0);
+            $this->Cell($widths[5], 30, $product['quotation_uprice'], 0);
+            $this->Cell($widths[6], 30, $product['quotation_amount'], 0);
+           
             $this->Ln();
         }
-
-         // Thin line
+        
+        // Thin line
         // Lines to separate computation section from the table
-            $this->SetY($this->GetY() + 2);
-            $this->SetDrawColor(0, 0, 0);
-            $this->SetLineWidth(0.2);
-            $this->Line(10, $this->GetY(), 200, $this->GetY());
+        $this->SetY($this->GetY() + 50);
+        $this->SetDrawColor(0, 0, 0);
+        $this->SetLineWidth(0.2);
+        $this->Line(10, $this->GetY(), 200, $this->GetY());
 
-            // Computation part design
-            $this->SetFont('Arial', 'B', 12);
-            $this->SetXY(130, $this->GetY() + 5);
-            $this->Cell(40, 7, 'Subtotal:', 0, 0, 'R');
-            $this->Cell(20, 7, '2,000.00', 0, 1, 'R');
+        // Computation part design
+        $this->SetFont('Arial', 'B', 12);
+        $this->SetXY(130, $this->GetY() + 5);
+        $this->Cell(40, 7, 'Subtotal:', 0, 0, 'R');
+        $this->Cell(20, 7, $quotation['quotation_stotal'], 0, 1, 'R');
 
-            $this->SetFont('Arial', '', 12);
-            $this->SetX(130);
-            $this->Cell(40, 7, 'VAT (7%):', 0, 0, 'R');
-            $this->Cell(20, 7, '140.00', 0, 1, 'R');
+        $this->SetFont('Arial', '', 12);
+        $this->SetX(130);
+        $this->Cell(40, 7, 'VAT (7%):', 0, 0, 'R');
+        $this->Cell(20, 7, $quotation['quotation_vat'], 0, 1, 'R');
 
-            $this->SetX(130);
-            $this->Cell(40, 7, 'Charge:', 0, 0, 'R');
-            $this->Cell(20, 7, '100.00', 0, 1, 'R');
+        $this->SetX(130);
+        $this->Cell(40, 7, 'Charge:', 0, 0, 'R');
+        $this->Cell(20, 7, $quotation['quotation_charge'], 0, 1, 'R');
 
-            $this->SetFont('Arial', 'B', 12);
-            $this->SetX(130);
-            $this->Cell(40, 7, 'Grand Total:', 0, 0, 'R');
-            $this->Cell(20, 7, '2,240.00', 0, 1, 'R');
-
+        $this->SetFont('Arial', 'B', 12);
+        $this->SetX(130);
+        $this->Cell(40, 7, 'Grand Total:', 0, 0, 'R');
+        $this->Cell(20, 7, $quotation['quotation_grandtotal'], 0, 1, 'R');
     }
 
     function Footer()
@@ -135,28 +168,6 @@ class PDF extends FPDF
 $pdf = new PDF();
 $pdf->AliasNbPages();
 $pdf->AddPage();
-
-// Example data for table
-$pdf->items = array(
-    array(
-        'image_path' => 'img/logo.png',
-        'description' => 'Item 1 Description',
-        'item_number' => '001',
-        'qty' => '10',
-        'unit' => 'pcs',
-        'unit_price' => '100',
-        'amount' => '1000'
-    ),
-    array(
-        'image_path' => 'img/logo.png',
-        'description' => 'Item 2 Description',
-        'item_number' => '002',
-        'qty' => '5',
-        'unit' => 'pcs',
-        'unit_price' => '200',
-        'amount' => '1000'
-    )
-);
 
 // Call the Table function to create the table
 $pdf->Table();
